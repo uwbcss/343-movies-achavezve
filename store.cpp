@@ -10,16 +10,18 @@
 
 /**
  * Constructor for Store - initializes empty containers for movies and customers
- * All data structures are initialized automatically by their default constructors
+ * All data structures are initialized automatically by their default
+ * constructors
  */
 Store::Store() {
   // Constructor - containers are initialized automatically
 }
 
 /**
- * Loads movie data from a CSV file, parsing each line and creating Movie objects via MovieFactory
- * File format: genre,stock,director,title,extra_info (where extra_info varies by genre)
- * Returns true if file loads successfully, false if file cannot be opened
+ * Loads movie data from a CSV file, parsing each line and creating Movie
+ * objects via MovieFactory File format: genre,stock,director,title,extra_info
+ * (where extra_info varies by genre) Returns true if file loads successfully,
+ * false if file cannot be opened
  */
 bool Store::loadMovies(const std::string &filename) {
   std::ifstream file(filename);
@@ -80,9 +82,10 @@ bool Store::loadMovies(const std::string &filename) {
 }
 
 /**
- * Loads customer data from a text file, creating Customer objects and storing them in both hash table and vector
- * File format: customerID lastName firstName (space-separated)
- * Returns true if file loads successfully, false if file cannot be opened
+ * Loads customer data from a text file, creating Customer objects and storing
+ * them in both hash table and vector File format: customerID lastName firstName
+ * (space-separated) Returns true if file loads successfully, false if file
+ * cannot be opened
  */
 bool Store::loadCustomers(const std::string &filename) {
   std::ifstream file(filename);
@@ -114,9 +117,10 @@ bool Store::loadCustomers(const std::string &filename) {
 }
 
 /**
- * Processes command file line by line, creating Command objects via CommandFactory and executing them
- * Each command modifies store state (borrow/return movies, display inventory/history)
- * Returns true if file processes successfully, false if file cannot be opened
+ * Processes command file line by line, creating Command objects via
+ * CommandFactory and executing them Each command modifies store state
+ * (borrow/return movies, display inventory/history) Returns true if file
+ * processes successfully, false if file cannot be opened
  */
 bool Store::processCommands(const std::string &filename) {
   std::ifstream file(filename);
@@ -141,9 +145,10 @@ bool Store::processCommands(const std::string &filename) {
 }
 
 /**
- * Searches for a specific movie by genre and search criteria using genre-specific comparison logic
- * Comedy: searches by title and year; Drama: by director and title; Classic: by month, year, and actor
- * Returns pointer to found movie or nullptr if not found
+ * Searches for a specific movie by genre and search criteria using
+ * genre-specific comparison logic Comedy: searches by title and year; Drama: by
+ * director and title; Classic: by month, year, and actor Returns pointer to
+ * found movie or nullptr if not found
  */
 Movie *Store::findMovie(char genre, const std::string &searchCriteria) {
   std::string parsedCriteria = parseMovieSearchCriteria(genre, searchCriteria);
@@ -224,9 +229,11 @@ Customer *Store::findCustomer(int customerId) {
 }
 
 /**
- * Processes a movie borrow request by validating customer, finding movie, checking availability, and updating records
- * Validates media type (must be 'D' for DVD), finds customer and movie, decrements stock, adds transaction to history
- * Returns true if borrow succeeds, false if any validation fails or movie is out of stock
+ * Processes a movie borrow request by validating customer, finding movie,
+ * checking availability, and updating records Validates media type (must be 'D'
+ * for DVD), finds customer and movie, decrements stock, adds transaction to
+ * history Returns true if borrow succeeds, false if any validation fails or
+ * movie is out of stock
  */
 bool Store::borrowMovie(int customerId, char mediaType, char movieType,
                         const std::string &movieInfo) {
@@ -258,9 +265,11 @@ bool Store::borrowMovie(int customerId, char mediaType, char movieType,
 }
 
 /**
- * Processes a movie return request by validating customer, finding movie, updating stock, and recording transaction
- * Validates media type (must be 'D' for DVD), finds customer and movie, increments available stock, adds transaction to history
- * Returns true if return succeeds, false if any validation fails
+ * Processes a movie return request by validating customer, finding movie,
+ * updating stock, and recording transaction Validates media type (must be 'D'
+ * for DVD), finds customer and movie, increments available stock, adds
+ * transaction to history Returns true if return succeeds, false if any
+ * validation fails
  */
 bool Store::returnMovie(int customerId, char mediaType, char movieType,
                         const std::string &movieInfo) {
@@ -287,8 +296,9 @@ bool Store::returnMovie(int customerId, char mediaType, char movieType,
 }
 
 /**
- * Displays complete movie inventory sorted automatically by the MovieComparator in the set container
- * Shows all movies with their genre-specific sorting (Comedy: title/year, Drama: director/title, Classic: date/actor)
+ * Displays complete movie inventory sorted automatically by the MovieComparator
+ * in the set container Shows all movies with their genre-specific sorting
+ * (Comedy: title/year, Drama: director/title, Classic: date/actor)
  */
 void Store::displayInventory() {
   std::cout << "INVENTORY:" << std::endl;
@@ -301,8 +311,9 @@ void Store::displayInventory() {
 }
 
 /**
- * Displays transaction history for a specific customer by finding the customer and calling their displayHistory method
- * Shows chronological list of all borrow/return transactions for the specified customer ID
+ * Displays transaction history for a specific customer by finding the customer
+ * and calling their displayHistory method Shows chronological list of all
+ * borrow/return transactions for the specified customer ID
  */
 void Store::displayCustomerHistory(int customerId) {
   Customer *customer = findCustomer(customerId);
@@ -315,8 +326,9 @@ void Store::displayCustomerHistory(int customerId) {
 }
 
 /**
- * Preprocesses movie search criteria by trimming whitespace (currently minimal processing)
- * Can be extended to handle more complex parsing logic for different search formats
+ * Preprocesses movie search criteria by trimming whitespace (currently minimal
+ * processing) Can be extended to handle more complex parsing logic for
+ * different search formats
  */
 std::string Store::parseMovieSearchCriteria(char /* genre */,
                                             const std::string &info) {
@@ -326,8 +338,9 @@ std::string Store::parseMovieSearchCriteria(char /* genre */,
 }
 
 /**
- * Utility function that removes leading and trailing whitespace from a string using STL algorithms
- * Uses lambda functions with std::find_if to locate first and last non-whitespace characters
+ * Utility function that removes leading and trailing whitespace from a string
+ * using STL algorithms Uses lambda functions with std::find_if to locate first
+ * and last non-whitespace characters
  */
 void Store::trimString(std::string &str) {
   // Remove leading whitespace
@@ -344,8 +357,9 @@ void Store::trimString(std::string &str) {
 }
 
 /**
- * Utility function that splits a string into tokens using a specified delimiter character
- * Returns vector of string tokens, useful for parsing CSV lines and command parameters
+ * Utility function that splits a string into tokens using a specified delimiter
+ * character Returns vector of string tokens, useful for parsing CSV lines and
+ * command parameters
  */
 std::vector<std::string> Store::split(const std::string &str, char delimiter) {
   std::vector<std::string> tokens;

@@ -11,14 +11,16 @@ bool Classic::registered = Classic::registerSelf();
 // Base Movie Implementation
 
 /**
- * Constructor for base Movie class - initializes stock count, borrowed count (starts at 0), director, and title
+ * Constructor for base Movie class - initializes stock count, borrowed count
+ * (starts at 0), director, and title
  */
 Movie::Movie(int stock, const std::string &director, const std::string &title)
     : stock(stock), borrowed(0), director(director), title(title) {}
 
 /**
- * Attempts to borrow a movie by incrementing borrowed count if copies are available
- * Returns true if successful, false if all copies are already borrowed
+ * Attempts to borrow a movie by incrementing borrowed count if copies are
+ * available Returns true if successful, false if all copies are already
+ * borrowed
  */
 bool Movie::borrowMovie() {
   if (stock > borrowed) {
@@ -29,8 +31,8 @@ bool Movie::borrowMovie() {
 }
 
 /**
- * Returns a borrowed movie by decrementing the borrowed count if any copies are currently out
- * Returns true if successful, false if no copies were borrowed
+ * Returns a borrowed movie by decrementing the borrowed count if any copies are
+ * currently out Returns true if successful, false if no copies were borrowed
  */
 bool Movie::returnMovie() {
   if (borrowed > 0) {
@@ -43,15 +45,17 @@ bool Movie::returnMovie() {
 // Comedy Implementation
 
 /**
- * Constructor for Comedy - extends Movie with a release year for comedy-specific sorting and identification
+ * Constructor for Comedy - extends Movie with a release year for
+ * comedy-specific sorting and identification
  */
 Comedy::Comedy(int stock, const std::string &director, const std::string &title,
                int year)
     : Movie(stock, director, title), year(year) {}
 
 /**
- * Comparison operator for Comedy sorting - comedies are sorted first by title, then by year
- * Different genres are sorted by their genre character for consistent ordering
+ * Comparison operator for Comedy sorting - comedies are sorted first by title,
+ * then by year Different genres are sorted by their genre character for
+ * consistent ordering
  */
 bool Comedy::operator<(const Movie &other) const {
   const Comedy *otherComedy = dynamic_cast<const Comedy *>(&other);
@@ -66,8 +70,9 @@ bool Comedy::operator<(const Movie &other) const {
 }
 
 /**
- * Equality operator for Comedy - two comedies are equal if they have the same title and year
- * Used for finding specific movies during borrow/return operations
+ * Equality operator for Comedy - two comedies are equal if they have the same
+ * title and year Used for finding specific movies during borrow/return
+ * operations
  */
 bool Comedy::operator==(const Movie &other) const {
   const Comedy *otherComedy = dynamic_cast<const Comedy *>(&other);
@@ -79,8 +84,9 @@ bool Comedy::operator==(const Movie &other) const {
 }
 
 /**
- * Converts Comedy to string format showing genre, title, year, director, and stock information
- * Format: "Comedy: Title (Year) Dir: Director Stock: Available Out: Borrowed"
+ * Converts Comedy to string format showing genre, title, year, director, and
+ * stock information Format: "Comedy: Title (Year) Dir: Director Stock:
+ * Available Out: Borrowed"
  */
 std::string Comedy::toString() const {
   return "Comedy: " + title + " (" + std::to_string(year) +
@@ -122,15 +128,17 @@ bool Comedy::registerSelf() {
 // Drama Implementation
 
 /**
- * Constructor for Drama - extends Movie with a release year for drama-specific sorting and identification
+ * Constructor for Drama - extends Movie with a release year for drama-specific
+ * sorting and identification
  */
 Drama::Drama(int stock, const std::string &director, const std::string &title,
              int year)
     : Movie(stock, director, title), year(year) {}
 
 /**
- * Comparison operator for Drama sorting - dramas are sorted first by director, then by title
- * Different genres are sorted by their genre character for consistent ordering
+ * Comparison operator for Drama sorting - dramas are sorted first by director,
+ * then by title Different genres are sorted by their genre character for
+ * consistent ordering
  */
 bool Drama::operator<(const Movie &other) const {
   const Drama *otherDrama = dynamic_cast<const Drama *>(&other);
@@ -145,8 +153,9 @@ bool Drama::operator<(const Movie &other) const {
 }
 
 /**
- * Equality operator for Drama - two dramas are equal if they have the same director and title
- * Used for finding specific movies during borrow/return operations
+ * Equality operator for Drama - two dramas are equal if they have the same
+ * director and title Used for finding specific movies during borrow/return
+ * operations
  */
 bool Drama::operator==(const Movie &other) const {
   const Drama *otherDrama = dynamic_cast<const Drama *>(&other);
@@ -158,8 +167,9 @@ bool Drama::operator==(const Movie &other) const {
 }
 
 /**
- * Converts Drama to string format showing genre, director, title, year, and stock information
- * Format: "Drama: Director, Title (Year) Stock: Available Out: Borrowed"
+ * Converts Drama to string format showing genre, director, title, year, and
+ * stock information Format: "Drama: Director, Title (Year) Stock: Available
+ * Out: Borrowed"
  */
 std::string Drama::toString() const {
   return "Drama: " + director + ", " + title + " (" + std::to_string(year) +
@@ -199,7 +209,8 @@ bool Drama::registerSelf() {
 // Classic Implementation
 
 /**
- * Constructor for Classic - extends Movie with actor, month, and year for classic-specific sorting and identification
+ * Constructor for Classic - extends Movie with actor, month, and year for
+ * classic-specific sorting and identification
  */
 Classic::Classic(int stock, const std::string &director,
                  const std::string &title, const std::string &actor, int month,
@@ -207,8 +218,9 @@ Classic::Classic(int stock, const std::string &director,
     : Movie(stock, director, title), actor(actor), month(month), year(year) {}
 
 /**
- * Comparison operator for Classic sorting - classics are sorted by month, then year, then actor
- * Different genres are sorted by their genre character for consistent ordering
+ * Comparison operator for Classic sorting - classics are sorted by month, then
+ * year, then actor Different genres are sorted by their genre character for
+ * consistent ordering
  */
 bool Classic::operator<(const Movie &other) const {
   const Classic *otherClassic = dynamic_cast<const Classic *>(&other);
@@ -226,8 +238,9 @@ bool Classic::operator<(const Movie &other) const {
 }
 
 /**
- * Equality operator for Classic - two classics are equal if they have the same month, year, and actor
- * Used for finding specific movies during borrow/return operations
+ * Equality operator for Classic - two classics are equal if they have the same
+ * month, year, and actor Used for finding specific movies during borrow/return
+ * operations
  */
 bool Classic::operator==(const Movie &other) const {
   const Classic *otherClassic = dynamic_cast<const Classic *>(&other);
@@ -240,8 +253,9 @@ bool Classic::operator==(const Movie &other) const {
 }
 
 /**
- * Converts Classic to string format showing genre, release date, actor, title, director, and stock information
- * Format: "Classic: Month Year Actor - Title Dir: Director Stock: Available Out: Borrowed"
+ * Converts Classic to string format showing genre, release date, actor, title,
+ * director, and stock information Format: "Classic: Month Year Actor - Title
+ * Dir: Director Stock: Available Out: Borrowed"
  */
 std::string Classic::toString() const {
   return "Classic: " + std::to_string(month) + " " + std::to_string(year) +
@@ -260,7 +274,8 @@ Movie *Classic::clone() const {
 
 /**
  * Factory method that creates a Classic object from parsed data
- * Parses "actor,month,year" or "actor month year" format from the extra parameter
+ * Parses "actor,month,year" or "actor month year" format from the extra
+ * parameter
  */
 Movie *Classic::create(int stock, const std::string &director,
                        const std::string &title, const std::string &extra) {
@@ -300,8 +315,8 @@ bool Classic::registerSelf() {
 // MovieFactory Implementation
 
 /**
- * Returns the singleton instance of MovieFactory using the Meyer's singleton pattern
- * Ensures only one factory exists throughout the program lifetime
+ * Returns the singleton instance of MovieFactory using the Meyer's singleton
+ * pattern Ensures only one factory exists throughout the program lifetime
  */
 MovieFactory &MovieFactory::getInstance() {
   static MovieFactory instance;
@@ -309,8 +324,9 @@ MovieFactory &MovieFactory::getInstance() {
 }
 
 /**
- * Registers a movie creation function with the factory, mapping a genre character to its creator function
- * Enables the factory to create movies of different types based on genre identifier
+ * Registers a movie creation function with the factory, mapping a genre
+ * character to its creator function Enables the factory to create movies of
+ * different types based on genre identifier
  */
 bool MovieFactory::registerMovie(char genre, CreateFunction func) {
   creators[genre] = func;
@@ -318,8 +334,9 @@ bool MovieFactory::registerMovie(char genre, CreateFunction func) {
 }
 
 /**
- * Creates a movie object by determining the genre type and calling the appropriate creator function
- * Returns nullptr if the genre is not registered or creation fails
+ * Creates a movie object by determining the genre type and calling the
+ * appropriate creator function Returns nullptr if the genre is not registered
+ * or creation fails
  */
 Movie *MovieFactory::createMovie(char genre, int stock,
                                  const std::string &director,
