@@ -8,10 +8,19 @@
 #include <iostream>
 #include <sstream>
 
+/**
+ * Constructor for Store - initializes empty containers for movies and customers
+ * All data structures are initialized automatically by their default constructors
+ */
 Store::Store() {
   // Constructor - containers are initialized automatically
 }
 
+/**
+ * Loads movie data from a CSV file, parsing each line and creating Movie objects via MovieFactory
+ * File format: genre,stock,director,title,extra_info (where extra_info varies by genre)
+ * Returns true if file loads successfully, false if file cannot be opened
+ */
 bool Store::loadMovies(const std::string &filename) {
   std::ifstream file(filename);
   if (!file.is_open()) {
@@ -70,6 +79,11 @@ bool Store::loadMovies(const std::string &filename) {
   return true;
 }
 
+/**
+ * Loads customer data from a text file, creating Customer objects and storing them in both hash table and vector
+ * File format: customerID lastName firstName (space-separated)
+ * Returns true if file loads successfully, false if file cannot be opened
+ */
 bool Store::loadCustomers(const std::string &filename) {
   std::ifstream file(filename);
   if (!file.is_open()) {
@@ -99,6 +113,11 @@ bool Store::loadCustomers(const std::string &filename) {
   return true;
 }
 
+/**
+ * Processes command file line by line, creating Command objects via CommandFactory and executing them
+ * Each command modifies store state (borrow/return movies, display inventory/history)
+ * Returns true if file processes successfully, false if file cannot be opened
+ */
 bool Store::processCommands(const std::string &filename) {
   std::ifstream file(filename);
   if (!file.is_open()) {
@@ -121,6 +140,11 @@ bool Store::processCommands(const std::string &filename) {
   return true;
 }
 
+/**
+ * Searches for a specific movie by genre and search criteria using genre-specific comparison logic
+ * Comedy: searches by title and year; Drama: by director and title; Classic: by month, year, and actor
+ * Returns pointer to found movie or nullptr if not found
+ */
 Movie *Store::findMovie(char genre, const std::string &searchCriteria) {
   std::string parsedCriteria = parseMovieSearchCriteria(genre, searchCriteria);
 
@@ -187,6 +211,10 @@ Movie *Store::findMovie(char genre, const std::string &searchCriteria) {
   return nullptr;
 }
 
+/**
+ * Searches for a customer by ID using the custom hash table implementation
+ * Returns pointer to customer if found, nullptr if customer ID doesn't exist
+ */
 Customer *Store::findCustomer(int customerId) {
   Customer *customer = nullptr;
   if (customers.find(customerId, customer)) {
@@ -195,6 +223,11 @@ Customer *Store::findCustomer(int customerId) {
   return nullptr;
 }
 
+/**
+ * Processes a movie borrow request by validating customer, finding movie, checking availability, and updating records
+ * Validates media type (must be 'D' for DVD), finds customer and movie, decrements stock, adds transaction to history
+ * Returns true if borrow succeeds, false if any validation fails or movie is out of stock
+ */
 bool Store::borrowMovie(int customerId, char mediaType, char movieType,
                         const std::string &movieInfo) {
   if (mediaType != 'D') {
@@ -224,6 +257,11 @@ bool Store::borrowMovie(int customerId, char mediaType, char movieType,
   return true;
 }
 
+/**
+ * Processes a movie return request by validating customer, finding movie, updating stock, and recording transaction
+ * Validates media type (must be 'D' for DVD), finds customer and movie, increments available stock, adds transaction to history
+ * Returns true if return succeeds, false if any validation fails
+ */
 bool Store::returnMovie(int customerId, char mediaType, char movieType,
                         const std::string &movieInfo) {
   if (mediaType != 'D') {
@@ -248,6 +286,10 @@ bool Store::returnMovie(int customerId, char mediaType, char movieType,
   return true;
 }
 
+/**
+ * Displays complete movie inventory sorted automatically by the MovieComparator in the set container
+ * Shows all movies with their genre-specific sorting (Comedy: title/year, Drama: director/title, Classic: date/actor)
+ */
 void Store::displayInventory() {
   std::cout << "INVENTORY:" << std::endl;
 
@@ -258,6 +300,10 @@ void Store::displayInventory() {
   std::cout << std::endl;
 }
 
+/**
+ * Displays transaction history for a specific customer by finding the customer and calling their displayHistory method
+ * Shows chronological list of all borrow/return transactions for the specified customer ID
+ */
 void Store::displayCustomerHistory(int customerId) {
   Customer *customer = findCustomer(customerId);
   if (customer == nullptr) {
@@ -268,6 +314,10 @@ void Store::displayCustomerHistory(int customerId) {
   customer->displayHistory();
 }
 
+/**
+ * Preprocesses movie search criteria by trimming whitespace (currently minimal processing)
+ * Can be extended to handle more complex parsing logic for different search formats
+ */
 std::string Store::parseMovieSearchCriteria(char /* genre */,
                                             const std::string &info) {
   std::string result = info;
@@ -275,6 +325,10 @@ std::string Store::parseMovieSearchCriteria(char /* genre */,
   return result;
 }
 
+/**
+ * Utility function that removes leading and trailing whitespace from a string using STL algorithms
+ * Uses lambda functions with std::find_if to locate first and last non-whitespace characters
+ */
 void Store::trimString(std::string &str) {
   // Remove leading whitespace
   str.erase(str.begin(),
@@ -289,6 +343,10 @@ void Store::trimString(std::string &str) {
             str.end());
 }
 
+/**
+ * Utility function that splits a string into tokens using a specified delimiter character
+ * Returns vector of string tokens, useful for parsing CSV lines and command parameters
+ */
 std::vector<std::string> Store::split(const std::string &str, char delimiter) {
   std::vector<std::string> tokens;
   std::stringstream ss(str);
